@@ -1,36 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   header.h                                           :+:    :+:            */
+/*   ft_lstsize_bonus.c                                 :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/01/31 17:13:33 by tblanker      ########   odam.nl         */
+/*   Created: 2019/12/10 11:57:30 by tblanker      #+#    #+#                 */
+/*   Updated: 2020/10/11 16:16:48 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include <pthread.h>
-#include "libft/libft.h"
-
-typedef struct s_table
+int	ft_lstsize(t_list *lst)
 {
-	int		n_forks;
-	int		n_philosophers;
-	int		time_until_starve;
-	int		eating_time;
-	int		sleeping_time;
-	int		number_of_meals;
-}				t_table;
+	int i;
 
-
-void	put_error(char *error);
-
-# endif
+	if (!lst)
+		return (0);
+	i = 0;
+	while (lst)
+	{
+		i++;
+		lst = lst->next;
+	}
+	return (i);
+}

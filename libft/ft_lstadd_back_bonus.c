@@ -1,36 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   header.h                                           :+:    :+:            */
+/*   ft_lstadd_back_bonus.c                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/01/31 17:13:33 by tblanker      ########   odam.nl         */
+/*   Created: 2019/12/10 12:15:23 by tblanker      #+#    #+#                 */
+/*   Updated: 2020/10/11 16:16:15 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include <pthread.h>
-#include "libft/libft.h"
-
-typedef struct s_table
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	int		n_forks;
-	int		n_philosophers;
-	int		time_until_starve;
-	int		eating_time;
-	int		sleeping_time;
-	int		number_of_meals;
-}				t_table;
+	t_list *temp;
 
-
-void	put_error(char *error);
-
-# endif
+	if (!(new) || !(lst))
+		return ;
+	temp = *lst;
+	if (temp)
+	{
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = new;
+	}
+	else
+		ft_lstadd_front(lst, new);
+}

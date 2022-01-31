@@ -1,36 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   header.h                                           :+:    :+:            */
+/*   ft_putnbr_fd.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/01/31 17:13:33 by tblanker      ########   odam.nl         */
+/*   Created: 2019/11/11 20:34:20 by tblanker      #+#    #+#                 */
+/*   Updated: 2020/10/11 16:17:21 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include <pthread.h>
-#include "libft/libft.h"
-
-typedef struct s_table
+void	ft_putnbr_fd(int n, int fd)
 {
-	int		n_forks;
-	int		n_philosophers;
-	int		time_until_starve;
-	int		eating_time;
-	int		sleeping_time;
-	int		number_of_meals;
-}				t_table;
+	unsigned int	result;
 
-
-void	put_error(char *error);
-
-# endif
+	result = 0;
+	if (n < 0)
+	{
+		ft_putchar_fd('-', fd);
+		result = (unsigned int)(n * -1);
+	}
+	else
+		result = (unsigned int)n;
+	if (result >= 10)
+		ft_putnbr_fd(result / 10, fd);
+	ft_putchar_fd((char)(result % 10 + '0'), fd);
+}

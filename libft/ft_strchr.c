@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   header.h                                           :+:    :+:            */
+/*   ft_strchr.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/01/31 17:13:33 by tblanker      ########   odam.nl         */
+/*   Created: 2019/11/04 11:54:04 by tblanker      #+#    #+#                 */
+/*   Updated: 2020/10/11 16:17:30 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include "libft.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include <pthread.h>
-#include "libft/libft.h"
-
-typedef struct s_table
+char	*ft_strchr(const char *s, int c)
 {
-	int		n_forks;
-	int		n_philosophers;
-	int		time_until_starve;
-	int		eating_time;
-	int		sleeping_time;
-	int		number_of_meals;
-}				t_table;
+	char *p;
 
-
-void	put_error(char *error);
-
-# endif
+	while (*s)
+	{
+		if (s[0] == (char)c)
+		{
+			p = (char*)s;
+			return (p);
+		}
+		s++;
+	}
+	if ((char)c == '\0')
+		return ((char*)s);
+	return (NULL);
+}

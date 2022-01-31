@@ -1,36 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   header.h                                           :+:    :+:            */
+/*   ft_memset.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/01/31 17:13:33 by tblanker      ########   odam.nl         */
+/*   Created: 2019/10/29 11:44:39 by tblanker      #+#    #+#                 */
+/*   Updated: 2020/10/11 16:17:10 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include <string.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include <pthread.h>
-#include "libft/libft.h"
-
-typedef struct s_table
+void	*ft_memset(void *b, int c, size_t len)
 {
-	int		n_forks;
-	int		n_philosophers;
-	int		time_until_starve;
-	int		eating_time;
-	int		sleeping_time;
-	int		number_of_meals;
-}				t_table;
+	size_t			i;
+	unsigned char	*p;
 
-
-void	put_error(char *error);
-
-# endif
+	p = b;
+	i = 0;
+	while (i < len)
+	{
+		*p = c;
+		p++;
+		i++;
+	}
+	return (b);
+}

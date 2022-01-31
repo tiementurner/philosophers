@@ -1,36 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   header.h                                           :+:    :+:            */
+/*   ft_memmove.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/01/31 17:13:33 by tblanker      ########   odam.nl         */
+/*   Created: 2019/10/30 11:59:17 by tblanker      #+#    #+#                 */
+/*   Updated: 2020/10/11 16:17:04 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HEADER_H
-# define HEADER_H
+#include <string.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include <pthread.h>
-#include "libft/libft.h"
-
-typedef struct s_table
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	int		n_forks;
-	int		n_philosophers;
-	int		time_until_starve;
-	int		eating_time;
-	int		sleeping_time;
-	int		number_of_meals;
-}				t_table;
+	size_t			i;
+	unsigned char	*p;
+	unsigned char	*q;
 
-
-void	put_error(char *error);
-
-# endif
+	if (!dst && !src)
+		return (dst);
+	p = (unsigned char *)src;
+	q = (unsigned char *)dst;
+	i = 0;
+	if (dst < src)
+		while (i < len)
+		{
+			q[i] = p[i];
+			i++;
+		}
+	else
+	{
+		while (len)
+		{
+			q[len - 1] = p[len - 1];
+			len--;
+		}
+	}
+	return (dst);
+}
