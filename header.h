@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/01/31 17:13:33 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/06 22:07:37 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,42 @@
 #include <pthread.h>
 #include "libft/libft.h"
 
-typedef struct s_table
+#define NOTHING 0
+#define THINKING 1
+#define EATING 2
+#define SLEEPING 3
+
+typedef	struct 		s_philosopher
 {
-	int		n_forks;
-	int		n_philosophers;
-	int		time_until_starve;
-	int		eating_time;
-	int		sleeping_time;
-	int		number_of_meals;
-}				t_table;
+	int				threaded;
+	int 			id;
+	int				state;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+}					t_philosopher;
+
+
+typedef struct 		s_table
+{
+	int				*fork_list;
+	int				n_philosophers;
+	int				time_until_starve;
+	int				eating_time;
+	int				sleeping_time;
+	int				number_of_meals;
+	t_philosopher	*philo_list;
+	pthread_mutex_t	lock;
+	struct timeval	time;
+	long int		previous_sec;
+	int				previous_usec;
+	int				*milliseconds_counted;
+}					t_table;
 
 
 void	put_error(char *error);
+void	argument_check(int ac, char **av);
+void	initialize(t_table *table, char **av, int ac);
+void	start_threading(t_table *table);
 
 # endif

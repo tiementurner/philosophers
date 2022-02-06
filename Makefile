@@ -6,7 +6,7 @@
 #    By: tblanker <tblanker@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/01/26 13:55:50 by tblanker      #+#    #+#                  #
-#    Updated: 2022/01/26 14:56:43 by tblanker      ########   odam.nl          #
+#    Updated: 2022/02/06 15:48:08 by tblanker      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = philo
 
 CC = clang
 
-FILES = c_files/main.c
+FILES = c_files/main.c c_files/error.c c_files/init.c c_files/threads.c
 
 OFILES = $(FILES:.c=.o)
 
@@ -25,8 +25,8 @@ all : $(NAME)
 $(NAME) : $(OFILES) libft.a
 	$(CC) $(CC_FLAGS) $(OFILES) -lft -o $(NAME)
 
-%.o: %.c_
-	$(CC) -pthread $(CC_FLAGS) -o $@ -c $<
+%.o: %.c
+	$(CC) $(CC_FLAGS) -pthread -o $@ -c $<
 
 libft.a :
 	$(MAKE) -C libft

@@ -1,0 +1,35 @@
+	while (1)
+	{
+		gettimeofday(&table->time, NULL);
+		if (table->time.tv_sec > table->previous_sec)
+			ms += (1000000 - table->previous_usec + table->time.tv_usec) / 1000;
+		else
+			ms += (table->time.tv_usec - table->previous_usec) / 1000;
+		table->previous_sec = table->time.tv_sec;
+		table->previous_usec = table->time.tv_usec;
+	//	printf("%d\n", ms);
+	}
+
+
+	
+	
+	
+	
+	
+		gettimeofday(&table->philo_list[id].time, NULL);
+	table->philo_list[id].previous_sec = table->philo_list[id].time.tv_sec;
+	table->philo_list[id].previous_usec = table->philo_list[id].time.tv_usec;
+	while (1)
+	{
+		gettimeofday(&table->philo_list[id].time, NULL);
+		if (table->philo_list[id].time.tv_sec > table->philo_list[id].previous_sec)
+			table->philo_list[id].milliseconds_counted += (1000000 - table->philo_list[id].previous_usec + table->philo_list[id].time.tv_usec) / 1000;
+		else
+			table->philo_list[id].milliseconds_counted += (table->philo_list[id].time.tv_usec - table->philo_list[id].previous_usec) / 1000;
+		table->philo_list[id].previous_sec = table->philo_list[id].time.tv_sec;
+		table->philo_list[id].previous_usec = table->philo_list[id].time.tv_usec;
+		//printf("%d\n", table->philo_list[id].milliseconds_counted);
+		if (table->philo_list[id].milliseconds_counted > 1000)
+			printf("philo %d is changing state\n", id);
+		//printf("%d\n", table->philo_list[id].milliseconds_counted);
+	}
