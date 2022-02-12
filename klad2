@@ -1,0 +1,9 @@
+void	get_timestamp(t_table *table)
+{
+	gettimeofday(&table->time, NULL);
+	table->timestamp += (table->time.tv_sec - table->previous_sec) * 1000 +
+						(table->time.tv_usec / 1000 - table->previous_usec / 1000);
+	printf("timestamp: %d\n", table->timestamp);
+	table->previous_sec = table->time.tv_sec;
+	table->previous_usec = table->time.tv_usec;
+}

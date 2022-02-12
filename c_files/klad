@@ -33,3 +33,41 @@
 			printf("philo %d is changing state\n", id);
 		//printf("%d\n", table->philo_list[id].milliseconds_counted);
 	}
+
+
+
+void	*timer_thread(void *arg)
+{
+	int ms;
+	t_table *table;
+
+	table = (t_table *) arg;
+	table->milliseconds_counted = &ms;
+	gettimeofday(&table->time, NULL);
+	table->previous_sec = table->time.tv_sec;
+	table->previous_usec = table->time.tv_usec;
+	while (1)
+	{
+		gettimeofday(&table->time, NULL);
+		if (table->time.tv_sec > table->previous_sec)
+		{
+			pthread_mutex_lock(&table->lock);
+			ms += (1000000 - table->previous_usec + table->time.tv_usec) / 1000;
+			pthread_mutex_unlock(&table->lock);
+		}
+		else
+		{
+			pthread_mutex_lock(&table->lock);
+			ms += (table->time.tv_usec - table->previous_usec)/ 1000;
+			pthread_mutex_unlock(&table->lock);
+		}
+		table->previous_sec = table->time.tv_sec;
+		table->previous_usec = table->time.tv_usec;
+		//printf("%d\n", ms);
+	}
+
+
+	10.2
+	11.1
+
+	11 - 10 * 1000 + 100 - 200

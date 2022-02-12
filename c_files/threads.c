@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/06 22:13:13 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/12 02:07:09 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,66 +45,92 @@ static	int	synchronize_threads(t_table *table)
 	while (table->philo_list[0].threaded == 0);//
 	return (id);
 }
+
+void	get_timestamp(t_table *table)
+{
+	gettimeofday(&table->time, NULL);
+	table->timestamp += (table->time.tv_sec - table->previous_sec) * 1000 +
+						(table->time.tv_usec / 1000 - table->previous_usec / 1000);
+	table->previous_sec = table->time.tv_sec;
+	table->previous_usec = table->time.tv_usec;
+}
+
+void	try_to_eat(t_table *table, t_philosopher *philo)
+{
+	int left_fork;
+	int	right_fork;
+
+	if (table->n_philosophers == 1)
+		return ;
+	left_fork = philo->id;
+	right_fork = philo->id - 1;
+	if (philo->id == 0)
+		right_fork = table->n_philosophers - 1;
+	if (philo->id == table->n_philosophers - 1)
+		right_fork = 0;
+	printf("value: id: %d----left: %d, right:%d\n", philo->id, table->fork_list[left_fork], table->fork_list[right_fork]);
+//	printf("id: id: %d----left: %d, right:%d\n", philo->id, left_fork, right_fork);
+	pthread_mutex_lock(&table->lock);
+	if (table->fork_list[left_fork] && table->fork_list[right_fork])
+	{
+		table->fork_list[left_fork] = 0;
+		table->fork_list[right_fork] = 0;
+		pthread_mutex_unlock(&table->lock);
+		printf("%d %d Has taken a fork.\n", table->timestamp, philo->id + 1);
+		printf("%d %d is eating\n", table->timestamp, philo->id + 1);
+		usleep(table->eating_time * 1000);
+	//	pthread_mutex_lock(&table->lock);
+		table->fork_list[left_fork] = 1;
+		table->fork_list[right_fork] = 1;
+	//	pthread_mutex_unlock(&table->lock);
+	}
+}
+
 void *test_thread(void *arg)
 {
-	t_table *table;
-	int		id;
-	//int		count;
-	// int 	fork_left;
-	// int		fork_right;
+	t_table 		*table;
+	t_philosopher 	*philo;
+	int				id;
+	int				printed;
+
+	printed = 0;
 	table = (t_table *) arg;
 	id = synchronize_threads(table);
-	while (*table->milliseconds_counted < 1)
+	philo = &table->philo_list[id];
+	while(1)
 	{
-//		if(*table->milliseconds_counted > 1000)
-		//	printf("%d\n", *table->milliseconds_counted);
+		philo->time_since_meal += table->timestamp;
+		try_to_eat(table, philo);
+		// if (time_since_meal > philo->time_to_die)
+		// 	printf("guy is dead");
 	}
-	printf("%d\n", *table->milliseconds_counted);
 	return (0);
 }
 
-void	*timer_thread(void *arg)
-{
-	int volatile ms;
-	t_table *table;
 
-	table = (t_table *) arg;
-	table->milliseconds_counted = &ms;
-	gettimeofday(&table->time, NULL);
-	table->previous_sec = table->time.tv_sec;
-	table->previous_usec = table->time.tv_usec;
-	while (1)
-	{
-		gettimeofday(&table->time, NULL);
-		if (table->time.tv_sec > table->previous_sec)
-			ms += (1000000 - table->previous_usec + table->time.tv_usec) / 1000;
-		else
-			ms += (table->time.tv_usec - table->previous_usec) / 1000;
-		table->previous_sec = table->time.tv_sec;
-		table->previous_usec = table->time.tv_usec;
-	//	printf("%d\n", ms);
-	}
-}
 
 void	start_threading(t_table *table)
 {
 	pthread_t		thread_list[table->n_philosophers];
-	pthread_t		timer;
 	int				i;
 
-//	pthread_mutex_init(&table->lock, NULL);
-
-	pthread_create(&timer, NULL, timer_thread, table);
+	pthread_mutex_init(&table->lock, NULL);
 	i = 0;
-	while (i < 1)
+	while (i < table->n_philosophers)
 	{
 		pthread_create(&thread_list[i], NULL, test_thread, table);
 		i++;
 	}
 	while (table->philo_list[0].threaded == 0)
-
+	table->timestamp = 0;
+	gettimeofday(&table->time, NULL);
+	table->previous_sec = table->time.tv_sec;
+	table->previous_usec = table->time.tv_usec;
+	while (1)
+	{
+		get_timestamp(table);
+	}
 	i = 0;
-	sleep(1);
 	while (i < table->n_philosophers)
 	{
 		pthread_join(thread_list[i], NULL);

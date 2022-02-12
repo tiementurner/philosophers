@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/06 22:07:37 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/12 01:28:43 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ typedef	struct 		s_philosopher
 	int				threaded;
 	int 			id;
 	int				state;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
+	int				time_since_meal;
 }					t_philosopher;
 
 
@@ -49,7 +47,7 @@ typedef struct 		s_table
 	struct timeval	time;
 	long int		previous_sec;
 	int				previous_usec;
-	int				*milliseconds_counted;
+	int				timestamp;
 }					t_table;
 
 
