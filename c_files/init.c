@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/12 01:46:56 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/12 15:46:19 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	create_philo_list(t_table *table)
 		table->philo_list[i].id = i;
 		table->philo_list[i].state = NOTHING;
 		table->philo_list[i].threaded = 0;
+		table->philo_list[i].time_since_meal = 0;
 		i++;
 	}
 }
@@ -36,9 +37,9 @@ void	initialize(t_table *table, char **av, int ac)
 	if (ac == 6)
 	 	table->number_of_meals = ft_atoi(av[5]);
 	table->n_philosophers = ft_atoi(av[1]);
-	table->time_until_starve = ft_atoi(av[2]);
+	table->time_until_starve = ft_atoi(av[2]) * 1000;
 	table->eating_time = ft_atoi(av[3]) * 1000;
-	table->sleeping_time  = ft_atoi(av[4]);
+	table->sleeping_time  = ft_atoi(av[4]) * 1000;
 	i = 0;
 	table->fork_list = malloc(sizeof(int) * table->n_philosophers);
 	while (i < table->n_philosophers)
