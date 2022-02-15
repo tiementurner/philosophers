@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/12 16:47:28 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/15 16:47:02 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static	int	synchronize_threads(t_table *table)
 {
 	int	id;
-
 
 	id = 0;
 	while (table->philo_list[id].threaded)
@@ -46,31 +45,35 @@ void	try_to_eat(t_table *table, t_philosopher *philo)
 	if (philo->id == 0)
 		right_fork = table->n_philosophers - 1;
 	if (philo->id == table->n_philosophers - 1)
-		right_fork = 0;
+		left_fork = 0;
 //	printf("ms: %d id: %d----left: %d, right:%d\n", table->time.tv_usec, philo->id + 1, table->fork_list[left_fork], table->fork_list[right_fork]);
-
-
-	pthread_mutex_lock(&table->lock);
-	if (table->fork_list[left_fork] && table->fork_list[right_fork])
+	pthread_mutex_lock(&table->lock[left_fork]);
+	if (table->fork_list[left_fork])
 	{
-		table->fork_list[left_fork] = 0;
-		table->fork_list[right_fork] = 0;
-		philo->state = EATING;
+		table->fork_list[left_fork] = TAKEN;
+		printf("%d %d has taken a fork.\n", table->timestamp, philo->id + 1);
+		philo->forks_in_hand++;
 	}
-	pthread_mutex_unlock(&table->lock);
-
-
-	if (philo->state == EATING)
+	pthread_mutex_unlock(&table->lock[left_fork]);
+	pthread_mutex_lock(&table->lock[right_fork]);
+	if (table->fork_list[right_fork])
 	{
+		table->fork_list[right_fork] = TAKEN;
 		printf("%d %d has taken a fork.\n", table->timestamp, philo->id + 1);
-		printf("%d %d has taken a fork.\n", table->timestamp, philo->id + 1);
+		philo->forks_in_hand++;
+	}
+	pthread_mutex_unlock(&table->lock[right_fork]);
+	if (philo->forks_in_hand == 2)
+	{
 		printf("%d %d is eating.\n", table->timestamp, philo->id + 1);
 		philo->time_since_meal = table->timestamp;
 		usleep(table->eating_time * 1000);
-//		pthread_mutex_lock(&table->lock);
-		table->fork_list[left_fork] = 1;
-		table->fork_list[right_fork] = 1;
-//		pthread_mutex_unlock(&table->lock);
+		pthread_mutex_lock(&table->lock[left_fork]);
+		table->fork_list[left_fork] = ON_TABLE;
+		pthread_mutex_unlock(&table->lock[right_fork]);
+		pthread_mutex_lock(&table->lock[right_fork]);
+		table->fork_list[right_fork] = ON_TABLE;
+		pthread_mutex_unlock(&table->lock[right_fork]);
 		philo->state = SLEEPING;
 	}
 }
@@ -91,7 +94,7 @@ void *test_thread(void *arg)
 		try_to_eat(table, philo);
 		if (table->timestamp - philo->time_since_meal > table->time_until_starve)
 		{
-			printf("%d %d guy is dead.\n", table->timestamp, philo->id + 1);
+			printf("%d %d died.\n", table->timestamp, philo->id + 1);
 			break ;
 		}
 		if (philo->state == SLEEPING)
@@ -113,8 +116,8 @@ void	start_threading(t_table *table)
 	pthread_t		thread_list[table->n_philosophers];
 	int				i;
 
-	pthread_mutex_init(&table->lock, NULL);
 	i = 0;
+
 	while (i < table->n_philosophers)
 	{
 		pthread_create(&thread_list[i], NULL, test_thread, table);
