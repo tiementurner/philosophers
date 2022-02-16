@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/15 16:06:20 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/16 17:15:58 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 #define NOTHING 0
 #define THINKING 1
-#define EATING 2
 #define SLEEPING 3
+#define DEAD 4
 
 #define TAKEN 0
 #define ON_TABLE 1
@@ -35,11 +35,14 @@ typedef	struct 		s_philosopher
 	int				state;
 	int				time_since_meal;
 	int				forks_in_hand;
+	int				left;
+	int				right;
 }					t_philosopher;
 
 
 typedef struct 		s_table
 {
+	int				funeral;
 	int				*fork_list;
 	int				n_philosophers;
 	int				time_until_starve;
