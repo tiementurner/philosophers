@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:15:58 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/18 16:04:06 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef	struct 		s_philosopher
 	int				forks_in_hand;
 	int				left;
 	int				right;
+	int				start;
 }					t_philosopher;
 
 
@@ -52,8 +53,8 @@ typedef struct 		s_table
 	t_philosopher	*philo_list;
 	pthread_mutex_t	*lock;
 	struct timeval	time;
-	long int		previous_sec;
-	int				previous_usec;
+	unsigned int	previous_sec;
+	long	int		previous_usec;
 	int				timestamp;
 }					t_table;
 
@@ -62,5 +63,6 @@ void	put_error(char *error);
 void	argument_check(int ac, char **av);
 void	initialize(t_table *table, char **av, int ac);
 void	start_threading(t_table *table);
+void	try_to_eat(t_table *table, t_philosopher *philo);
 
 # endif

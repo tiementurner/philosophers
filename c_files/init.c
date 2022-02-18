@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/16 17:16:10 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/18 16:05:14 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	create_philo_list(t_table *table)
 		table->philo_list[i].threaded = 0;
 		table->philo_list[i].time_since_meal = 0;
 		table->philo_list[i].forks_in_hand = 0;
+		table->philo_list[i].start = 0;
 		i++;
 	}
 }
