@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/21 16:41:11 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/23 16:34:45 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,15 @@ void		check_stomach(t_table *table, t_philosopher *philo)
 
 void		sleep_and_think(t_table *table, t_philosopher *philo)
 {
+	int sleeping_time;
+
 	if (philo->state == SLEEPING)
 	{
+		sleeping_time = table->timestamp;
 		printf("%d %d is sleeping.\n", table->timestamp, philo->id + 1);
-		usleep(table->sleeping_time * 1000);
+		while(table->timestamp - sleeping_time < 200)
+			usleep(1);
+		//printf("%d %d is done sleeping.\n", table->timestamp, philo->id + 1);
 		philo->state = THINKING;
 		printf("%d %d is thinking.\n", table->timestamp, philo->id + 1);
 	}
@@ -65,45 +70,52 @@ static	void	*philo_thread(void *arg)
 	while(1)
 	{
 		try_to_eat(table, philo);
+		sleep_and_think(table, philo);
 		check_stomach(table, philo);
 		if (philo->state == DEAD || table->funeral)
 			break ;
-		sleep_and_think(table, philo);
 	}
 	return (0);
 }
 
-void		check_pulse_rates(t_table *table, pthread_t *thread_list)
+void		*check_pulse_rates(void *arg)
 {
 	int i;
+	t_table	*table;
 
+	table = (t_table *) arg;
 	i = 0;
-	while (i < table->n_philosophers)
+	while (!table->funeral)
 	{
-		if (table->philo_list[i].state == DEAD)
+		i = 0;
+		while (i < table->n_philosophers)
 		{
-			get_timestamp(table);
-			printf("ending millisecond: %d\n", table->timestamp);
-			table->funeral = 1;
-			i = 0;
-			while (i < table->n_philosophers)
+			if (table->philo_list[i].state == DEAD)
 			{
-				pthread_join(thread_list[i], NULL);
-				i++;
+				get_timestamp(table);
+				printf("ending millisecond: %d\n", table->timestamp);
+				table->funeral = 1;
+				// i = 0;
+				// while (i < table->n_philosophers)
+				// {
+				// 	pthread_join(thread_list[i], NULL);
+				// 	i++;
+				// }
+				exit(1);
 			}
-			exit(1);
+			i++;
 		}
-		i++;
 	}
+	return (0);
 }
 
 void	start_threading(t_table *table)
-{
+{	
 	pthread_t		thread_list[table->n_philosophers];
 	int				i;
+	pthread_t		pulse_checker = NULL;
 
 	i = 0;
-
 	while (i < table->n_philosophers)
 	{
 		pthread_create(&thread_list[i], NULL, philo_thread, table);
@@ -111,12 +123,13 @@ void	start_threading(t_table *table)
 	}
 	while (table->philo_list[0].threaded == 0)
 	table->timestamp = 0;
+	pthread_create(&pulse_checker, NULL, check_pulse_rates, table);
 	gettimeofday(&table->time, NULL);
 	table->previous_sec = table->time.tv_sec;
 	table->previous_usec = table->time.tv_usec;
 	while (1)
 	{
 		get_timestamp(table);
-		check_pulse_rates(table, thread_list);
+	//	check_pulse_rates(table, thread_list);
 	}
 }

@@ -6,11 +6,11 @@
 #    By: tblanker <tblanker@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/01/26 13:55:50 by tblanker      #+#    #+#                  #
-#    Updated: 2022/02/18 13:23:06 by tblanker      ########   odam.nl          #
+#    Updated: 2022/02/23 15:23:41 by tblanker      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-CC_FLAGS = -Wall -Werror -Wextra
+CC_FLAGS = 
 
 NAME = philo
 

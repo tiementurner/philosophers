@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/18 13:17:39 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/21 16:39:46 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/23 16:58:23 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,24 @@
 
 static	void	use_forks(t_table *table, t_philosopher *philo)
 {
+	int	dinner_time;
+
 	printf("%d %d is eating.\n", table->timestamp, philo->id + 1);
 	philo->time_since_meal = table->timestamp;
-	usleep(table->eating_time * 1000);
-	pthread_mutex_lock(&table->lock[philo->left]);
+	dinner_time = table->timestamp;
+//	usleep(table->eating_time * 1000);
+	while (table->timestamp - dinner_time < 200)
+		usleep(1);
+//	printf("%d %d is waiting for mutex of left fork\n", table->timestamp, philo->id + 1);
+//	pthread_mutex_lock(&table->lock[philo->left]);
 	table->fork_list[philo->left] = ON_TABLE;
-	pthread_mutex_unlock(&table->lock[philo->left]);
-	philo->left_taken = 0;
-	pthread_mutex_lock(&table->lock[philo->right]);
+//	pthread_mutex_unlock(&table->lock[philo->left]);
+//	philo->left_taken = 0;
+//	printf("%d %d is waiting for mutex of right fork\n", table->timestamp, philo->id + 1);
+//	pthread_mutex_lock(&table->lock[philo->right]);
 	table->fork_list[philo->right] = ON_TABLE;
-	pthread_mutex_unlock(&table->lock[philo->right]);
-	philo->right_taken = 0;
+//	pthread_mutex_unlock(&table->lock[philo->right]);
+//	philo->right_taken = 0;
 	philo->state = SLEEPING;
 	philo->forks_in_hand = 0;
 }
@@ -39,7 +46,7 @@ static	void	check_fork(t_table *table, t_philosopher *philo, int fork, int left_
 			philo->left_taken = 1;
 		if (left_right == 1)
 			philo->right_taken = 1;
-		printf("%d %d has taken a fork.\n", table->timestamp, philo->id + 1);
+		printf("%d %d has taken a fork. fork num: %d\n", table->timestamp, philo->id + 1, fork + 1);
 		philo->forks_in_hand++;
 	}
 	pthread_mutex_unlock(&table->lock[fork]);	
@@ -65,6 +72,7 @@ void			put_fork_back(t_table *table, t_philosopher *philo)
 		philo->forks_in_hand = 0;
 		philo->right_taken = 0;
 	}
+	usleep(philo->id % 2 * 100);
 }
 
 void			try_to_eat(t_table *table, t_philosopher *philo)
