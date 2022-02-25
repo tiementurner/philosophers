@@ -6,7 +6,7 @@
 #    By: tblanker <tblanker@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/01/26 13:55:50 by tblanker      #+#    #+#                  #
-#    Updated: 2022/02/23 15:23:41 by tblanker      ########   odam.nl          #
+#    Updated: 2022/02/25 17:53:05 by tblanker      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME = philo
 CC = clang
 
 FILES = c_files/main.c c_files/error.c c_files/init.c c_files/threads.c \
-		c_files/fork_functions.c
+		c_files/state_changes.c c_files/death_checks.c
 
 OFILES = $(FILES:.c=.o)
 

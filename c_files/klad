@@ -71,3 +71,27 @@ void	*timer_thread(void *arg)
 	11.1
 
 	11 - 10 * 1000 + 100 - 200
+
+
+void			put_fork_back(t_table *table, t_philosopher *philo)
+{
+	if (philo->left_taken == 1)
+	{
+		pthread_mutex_lock(&table->lock[philo->left]);
+		table->fork_list[philo->left] = ON_TABLE;
+		pthread_mutex_unlock(&table->lock[philo->left]);
+//		printf("%d %d has put fork back fork num :%d\n", table->timestamp, philo->id + 1, philo->left);
+		philo->forks_in_hand = 0;
+		philo->left_taken = 0;
+	}
+	if (philo->right_taken == 1)
+	{
+		pthread_mutex_lock(&table->lock[philo->right]);
+		table->fork_list[philo->right] = ON_TABLE;
+		pthread_mutex_unlock(&table->lock[philo->right]);
+//		printf("%d %d has put fork back\n", table->timestamp, philo->id + 1);
+		philo->forks_in_hand = 0;
+		philo->right_taken = 0;
+	}
+	usleep(philo->id % 2 * 100);
+}

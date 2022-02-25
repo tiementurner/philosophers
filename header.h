@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/21 14:13:29 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/25 17:53:32 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,9 @@ void	argument_check(int ac, char **av);
 void	initialize(t_table *table, char **av, int ac);
 void	start_threading(t_table *table);
 void	try_to_eat(t_table *table, t_philosopher *philo);
+void	sleep_and_think(t_table *table, t_philosopher *philo);
+void	*check_pulse_rates(void *arg);
+void	check_stomach(t_table *table, t_philosopher *philo);
+void	get_timestamp(t_table *table);
 
 # endif
