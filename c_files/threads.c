@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/25 17:53:17 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/27 17:39:12 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ static	void	*philo_thread(void *arg)
 		try_to_eat(table, philo);
 		if (philo->state == DEAD || table->funeral)
 			break ;
+		if (philo->meals == table->number_of_meals)
+		{
+			table->finished_eating++;
+			break ;
+		}
 		sleep_and_think(table, philo);
 		if (philo->state == DEAD || table->funeral)
 			break ;
@@ -55,11 +60,24 @@ static	void	*philo_thread(void *arg)
 	return (0);
 }
 
+static	void	join_threads(pthread_t *thread_list, int n, pthread_t pulse_check)
+{
+	int i;
+
+	i = 0;
+	while (i < n)
+	{
+		pthread_join(thread_list[i], NULL);
+		i++;
+	}
+	pthread_join(pulse_check, NULL);
+}
+
 void	start_threading(t_table *table)
 {	
 	pthread_t		thread_list[table->n_philosophers];
 	int				i;
-	pthread_t		pulse_checker = NULL;
+	pthread_t		pulse_checker;
 
 	i = 0;
 	while (i < table->n_philosophers)
@@ -73,9 +91,10 @@ void	start_threading(t_table *table)
 	gettimeofday(&table->time, NULL);
 	table->previous_sec = table->time.tv_sec;
 	table->previous_usec = table->time.tv_usec;
-	while (!table->funeral)
+	while (!table->funeral && !(table->finished_eating == table->n_philosophers))
 	{
 		get_timestamp(table);
 		usleep(50);
 	}
+	join_threads(thread_list, table->n_philosophers, pulse_checker);
 }

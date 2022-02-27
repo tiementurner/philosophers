@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 17:50:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/25 17:50:59 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/27 17:38:49 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void		*check_pulse_rates(void *arg)
 		i = 0;
 		while (i < table->n_philosophers)
 		{
-			if (table->philo_list[i].state == DEAD)
+			if (table->philo_list[i].state == DEAD || table->finished_eating == table->n_philosophers)
 			{
 				get_timestamp(table);
 				printf("ending millisecond: %d\n", table->timestamp);

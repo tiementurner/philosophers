@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   sleep_and_eat.c                                    :+:    :+:            */
+/*   state_changes.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/18 13:17:39 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/25 17:44:57 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/27 17:28:32 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static	void	use_forks(t_table *table, t_philosopher *philo)
 	philo->forks_in_hand = 0;
 }
 
-static	void	check_fork(t_table *table, t_philosopher *philo, int fork, int left_right)
+static	void	check_fork(t_table *table, t_philosopher *philo, int fork)
 {
 	pthread_mutex_lock(&table->lock[fork]);
 	if (table->fork_list[fork])
@@ -45,10 +45,13 @@ void			try_to_eat(t_table *table, t_philosopher *philo)
 	if (philo->start == 0)
 		usleep(10000 * (philo->id % 2));
 	philo->start = 1;
-	check_fork(table, philo, philo->left, 0);
-	check_fork(table, philo, philo->right, 1);
+	check_fork(table, philo, philo->left);
+	check_fork(table, philo, philo->right);
 	if (philo->forks_in_hand == 2)
+	{
 		use_forks(table, philo);
+		philo->meals++;
+	}
 }
 
 void		sleep_and_think(t_table *table, t_philosopher *philo)

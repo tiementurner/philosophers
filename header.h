@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/25 17:53:32 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/27 17:20:05 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ typedef	struct 		s_philosopher
 	int				time_since_meal;
 	int				forks_in_hand;
 	int				left;
-	int				left_taken;
-	int				right_taken;
 	int				right;
 	int				start;
+	int				meals;
 }					t_philosopher;
 
 
 typedef struct 		s_table
 {
+	int				finished_eating;
 	int				funeral;
 	int				*fork_list;
 	int				n_philosophers;

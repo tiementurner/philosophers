@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/21 16:24:04 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/27 17:20:15 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,22 @@
 void	create_philo_list(t_table *table)
 {
 	int	i;
-	int	max;
 
-	max = table->n_philosophers;
 	i = 0;
-	table->philo_list = malloc(sizeof(t_philosopher) * max);
-	while (i < max)
+	table->philo_list = malloc(sizeof(t_philosopher) * table->n_philosophers);
+	while (i < table->n_philosophers)
 	{
 		table->philo_list[i].left = i;
 		table->philo_list[i].right = i - 1;
 		if (i == 0)
-			table->philo_list[i].right = max - 1;
+			table->philo_list[i].right = table->n_philosophers - 1;
 		table->philo_list[i].id = i;
 		table->philo_list[i].state = NOTHING;
 		table->philo_list[i].threaded = 0;
 		table->philo_list[i].time_since_meal = 0;
 		table->philo_list[i].forks_in_hand = 0;
 		table->philo_list[i].start = 0;
-		table->philo_list[i].right_taken = 0;
-		table->philo_list[i].left_taken = 0;
+		table->philo_list[i].meals = 0;
 		i++;
 	}
 }
@@ -50,6 +47,7 @@ void	initialize(t_table *table, char **av, int ac)
 	table->eating_time = ft_atoi(av[3]);
 	table->sleeping_time  = ft_atoi(av[4]);
 	table->funeral = 0;
+	table->finished_eating = 0;
 	i = 0;
 	table->fork_list = malloc(sizeof(int) * table->n_philosophers);
 	table->lock = mutex_list;
