@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/18 13:17:39 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/27 17:28:32 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/27 21:07:02 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static	void	check_fork(t_table *table, t_philosopher *philo, int fork)
 	pthread_mutex_lock(&table->lock[fork]);
 	if (table->fork_list[fork])
 	{
-		printf("%d %d has taken a fork. fork num: %d\n", table->timestamp, philo->id + 1, fork + 1);
+		printf("%d %d has taken a fork.\n", table->timestamp, philo->id + 1);
+		table->fork_list[fork] = TAKEN;
 		philo->forks_in_hand++;
 	}
 	pthread_mutex_unlock(&table->lock[fork]);	

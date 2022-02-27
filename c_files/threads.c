@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/27 17:39:12 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/02/27 21:08:17 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ static	void	join_threads(pthread_t *thread_list, int n, pthread_t pulse_check)
 	i = 0;
 	while (i < n)
 	{
-		pthread_join(thread_list[i], NULL);
+		pthread_detach(thread_list[i]);
 		i++;
 	}
-	pthread_join(pulse_check, NULL);
+	pthread_detach(pulse_check);
 }
 
 void	start_threading(t_table *table)
