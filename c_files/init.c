@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/03 13:20:05 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/04 00:02:48 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	create_philo_list(t_table *table)
 void	initialize(t_table *table, char **av, int ac)
 {
 	int i;
-	pthread_mutex_t mutex_list[ft_atoi(av[1])];
+//	pthread_mutex_t mutex_list[ft_atoi(av[1])];
 
 	if (ac == 6)
 	 	table->number_of_meals = ft_atoi(av[5]);
@@ -50,8 +50,9 @@ void	initialize(t_table *table, char **av, int ac)
 	table->timestamp = 0;
 	table->finished_eating = 0;
 	i = 0;
+	table->lock = malloc(sizeof(pthread_mutex_t) * table->n_philosophers);
 	table->fork_list = malloc(sizeof(int) * table->n_philosophers);
-	table->lock = mutex_list;
+//	table->lock = mutex_list;
 	while (i < table->n_philosophers)
 	{
 		table->fork_list[i] = 1;
