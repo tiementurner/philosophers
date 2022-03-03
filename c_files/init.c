@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/27 17:20:15 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/03 13:20:05 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	initialize(t_table *table, char **av, int ac)
 	table->eating_time = ft_atoi(av[3]);
 	table->sleeping_time  = ft_atoi(av[4]);
 	table->funeral = 0;
+	table->timestamp = 0;
 	table->finished_eating = 0;
 	i = 0;
 	table->fork_list = malloc(sizeof(int) * table->n_philosophers);
@@ -57,5 +58,6 @@ void	initialize(t_table *table, char **av, int ac)
 		pthread_mutex_init(&table->lock[i], NULL);
 		i++;
 	}
+	pthread_mutex_init(&table->sync_lock, NULL);
 	create_philo_list(table);
 }

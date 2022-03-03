@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/27 17:20:05 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/03 13:13:38 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct 		s_table
 	unsigned int	previous_sec;
 	long	int		previous_usec;
 	int				timestamp;
+	pthread_mutex_t	sync_lock;
 }					t_table;
 
 

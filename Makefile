@@ -6,11 +6,11 @@
 #    By: tblanker <tblanker@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/01/26 13:55:50 by tblanker      #+#    #+#                  #
-#    Updated: 2022/02/27 17:15:30 by tblanker      ########   odam.nl          #
+#    Updated: 2022/03/03 14:25:47 by tblanker      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-CC_FLAGS = -Wall -Werror -Wextra
+CC_FLAGS = -Wall -Werror -Wextra -fsanitize=thread -g
 
 NAME = philo
 
@@ -27,7 +27,7 @@ $(NAME) : $(OFILES) libft.a
 	$(CC) $(CC_FLAGS) $(OFILES) -lft -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CC_FLAGS) -pthread -o $@ -c $<
+	$(CC) $(CC_FLAGS) -pthread -g -o $@ -c $<
 
 libft.a :
 	$(MAKE) -C libft

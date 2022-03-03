@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/02/27 21:08:17 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/03 13:20:00 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@ static	int		synchronize_threads(t_table *table)
 	int	id;
 
 	id = 0;
+	pthread_mutex_lock(&table->sync_lock);
 	while (table->philo_list[id].threaded)
 		id++;
 	table->philo_list[id].threaded = 1;
-	while (table->philo_list[0].threaded == 0);//
+	pthread_mutex_unlock(&table->sync_lock);
+	// while (table->philo_list[table->n_philosophers - 1].threaded == 0)
+	// 	usleep(50);//
 	return (id);
 }
 
@@ -85,8 +88,7 @@ void	start_threading(t_table *table)
 		pthread_create(&thread_list[i], NULL, philo_thread, table);
 		i++;
 	}
-	while (table->philo_list[0].threaded == 0)
-	table->timestamp = 0;
+//	while (table->philo_list[table->n_philosophers - 1].threaded == 0)
 	pthread_create(&pulse_checker, NULL, check_pulse_rates, table);
 	gettimeofday(&table->time, NULL);
 	table->previous_sec = table->time.tv_sec;
