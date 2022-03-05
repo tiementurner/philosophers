@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/04 00:02:48 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/04 15:57:52 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	create_philo_list(t_table *table)
 		table->philo_list[i].forks_in_hand = 0;
 		table->philo_list[i].start = 0;
 		table->philo_list[i].meals = 0;
+		pthread_mutex_init(&table->philo_list[i].state_lock, NULL);
 		i++;
 	}
 }
@@ -60,5 +61,6 @@ void	initialize(t_table *table, char **av, int ac)
 		i++;
 	}
 	pthread_mutex_init(&table->sync_lock, NULL);
+	pthread_mutex_init(&table->check_lock, NULL);
 	create_philo_list(table);
 }

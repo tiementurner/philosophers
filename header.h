@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/03 13:13:38 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/04 15:51:57 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef	struct 		s_philosopher
 	int				right;
 	int				start;
 	int				meals;
+	pthread_mutex_t	state_lock;
 }					t_philosopher;
 
 
@@ -55,10 +56,11 @@ typedef struct 		s_table
 	t_philosopher	*philo_list;
 	pthread_mutex_t	*lock;
 	struct timeval	time;
-	unsigned int	previous_sec;
-	long	int		previous_usec;
+	unsigned int	start_sec;
+	long	int		start_usec;
 	int				timestamp;
 	pthread_mutex_t	sync_lock;
+	pthread_mutex_t	check_lock;
 }					t_table;
 
 
@@ -70,6 +72,6 @@ void	try_to_eat(t_table *table, t_philosopher *philo);
 void	sleep_and_think(t_table *table, t_philosopher *philo);
 void	*check_pulse_rates(void *arg);
 void	check_stomach(t_table *table, t_philosopher *philo);
-void	get_timestamp(t_table *table);
+int		get_timestamp(t_table *table);
 
 # endif
