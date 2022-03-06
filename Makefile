@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC_FLAGS = -Wall -Werror -Wextra
+CC_FLAGS = -Wall -Werror -Wextra -pthread
 
 NAME = philo
 
@@ -27,7 +27,7 @@ $(NAME) : $(OFILES) libft.a
 	$(CC) $(CC_FLAGS) $(OFILES) -lft -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CC_FLAGS) -pthread -g -o $@ -c $<
+	$(CC) $(CC_FLAGS) -g -o $@ -c $<
 
 libft.a :
 	$(MAKE) -C libft
