@@ -12,15 +12,25 @@
 
 #include "../header.h"
 
+void	philo_print(char *message, t_table *table, t_philosopher *philo)
+{
+	pthread_mutex_lock(&table->print_lock);
+	if (check_if_done(table, philo))
+	{
+		pthread_mutex_unlock(&table->print_lock);
+		return ;
+	}
+	printf("%d %d %s", get_timestamp(table), philo->id +1, message);
+	pthread_mutex_unlock(&table->print_lock);
+}
+
 static	void	use_forks(t_table *table, t_philosopher *philo)
 {
 	int	dinner_time;
 	int	timestamp;
 
 	timestamp = get_timestamp(table);
-	pthread_mutex_lock(&table->print_lock);
-	printf("%d %d is eating.\n", timestamp, philo->id + 1);
-	pthread_mutex_unlock(&table->print_lock);
+	philo_print("is eating\n", table, philo);
 	philo->time_since_meal = timestamp;
 	dinner_time = timestamp;
 	while (get_timestamp(table) - dinner_time < table->eating_time)
@@ -42,9 +52,12 @@ static	void	check_fork(t_table *table, t_philosopher *philo, int fork)
 	pthread_mutex_lock(&table->lock[fork]);
 	if (table->fork_list[fork])
 	{
-		pthread_mutex_lock(&table->print_lock);
-		printf("%d %d has taken a fork.\n", get_timestamp(table), philo->id + 1);
-		pthread_mutex_unlock(&table->print_lock);
+		if (check_if_done(table, philo))
+		{
+			pthread_mutex_unlock(&table->lock[fork]);
+			return ;
+		}
+		philo_print("has taken a fork.\n", table, philo);
 		table->fork_list[fork] = TAKEN;
 		philo->forks_in_hand++;
 	}
@@ -53,8 +66,6 @@ static	void	check_fork(t_table *table, t_philosopher *philo, int fork)
 
 void			try_to_eat(t_table *table, t_philosopher *philo)
 {
-	if (table->n_philosophers == 1)
-		return ;
 	if (philo->start == 0)
 		usleep(100 * (philo->id % 2));
 	philo->start = 1;
@@ -76,16 +87,12 @@ void		sleep_and_think(t_table *table, t_philosopher *philo)
 	{
 		timestamp = get_timestamp(table);
 		sleeping_time = timestamp;
-		pthread_mutex_lock(&table->print_lock);
-		printf("%d %d is sleeping.\n", timestamp, philo->id + 1);
-		pthread_mutex_unlock(&table->print_lock);
+		philo_print("is sleeping\n", table, philo);
 		while(get_timestamp(table) - sleeping_time < table->sleeping_time)
 			usleep(50);
 		pthread_mutex_lock(&philo->state_lock);
 		philo->state = THINKING;
 		pthread_mutex_unlock(&philo->state_lock);
-		pthread_mutex_lock(&table->print_lock);
-		printf("%d %d is thinking.\n", get_timestamp(table), philo->id + 1);
-		pthread_mutex_unlock(&table->print_lock);
+		philo_print("is thinking\n", table, philo);
 	}
 }

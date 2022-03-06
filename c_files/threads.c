@@ -12,7 +12,7 @@
 
 #include "header.h"
 
-static	int		synchronize_threads(t_table *table)
+static	int		get_philo_id(t_table *table)
 {
 	int	id;
 
@@ -39,11 +39,10 @@ static	void	*philo_thread(void *arg)
 {
 	t_table 		*table;
 	t_philosopher 	*philo;
-	int				id;
 
 	table = (t_table *) arg;
-	id = synchronize_threads(table);
-	philo = &table->philo_list[id];
+	
+	philo = &table->philo_list[get_philo_id(table)];
 	while(1)
 	{
 		if (check_if_done(table, philo))

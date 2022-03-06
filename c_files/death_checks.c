@@ -33,9 +33,7 @@ int			twenty_five_line_rule(t_table *table, t_philosopher *philo)
 	pthread_mutex_lock(&table->check_lock);
 	if (philo->state == DEAD || table->finished_eating == table->n_philosophers)
 	{
-		pthread_mutex_lock(&table->print_lock);
 		printf("ending millisecond: %d\n", get_timestamp(table));
-		pthread_mutex_unlock(&table->print_lock);
 		table->funeral = 1;
 		pthread_mutex_unlock(&philo->state_lock);
 		pthread_mutex_unlock(&table->check_lock);
@@ -71,9 +69,9 @@ void		check_stomach(t_table *table, t_philosopher *philo)
 {
 	if (get_timestamp(table) - philo->time_since_meal > table->time_until_starve)
 	{
-		pthread_mutex_lock(&table->print_lock);
+		if (check_if_done(table, philo))
+			return ;
 		printf("%d %d died.\n", get_timestamp(table), philo->id + 1);
-		pthread_mutex_unlock(&table->print_lock);
 		pthread_mutex_lock(&philo->state_lock);
 		philo->state = DEAD;
 		pthread_mutex_unlock(&philo->state_lock);
