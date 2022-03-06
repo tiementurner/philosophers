@@ -18,7 +18,9 @@ static	void	use_forks(t_table *table, t_philosopher *philo)
 	int	timestamp;
 
 	timestamp = get_timestamp(table);
+	pthread_mutex_lock(&table->print_lock);
 	printf("%d %d is eating.\n", timestamp, philo->id + 1);
+	pthread_mutex_unlock(&table->print_lock);
 	philo->time_since_meal = timestamp;
 	dinner_time = timestamp;
 	while (get_timestamp(table) - dinner_time < table->eating_time)
@@ -40,7 +42,9 @@ static	void	check_fork(t_table *table, t_philosopher *philo, int fork)
 	pthread_mutex_lock(&table->lock[fork]);
 	if (table->fork_list[fork])
 	{
+		pthread_mutex_lock(&table->print_lock);
 		printf("%d %d has taken a fork.\n", get_timestamp(table), philo->id + 1);
+		pthread_mutex_unlock(&table->print_lock);
 		table->fork_list[fork] = TAKEN;
 		philo->forks_in_hand++;
 	}
@@ -72,12 +76,16 @@ void		sleep_and_think(t_table *table, t_philosopher *philo)
 	{
 		timestamp = get_timestamp(table);
 		sleeping_time = timestamp;
+		pthread_mutex_lock(&table->print_lock);
 		printf("%d %d is sleeping.\n", timestamp, philo->id + 1);
+		pthread_mutex_unlock(&table->print_lock);
 		while(get_timestamp(table) - sleeping_time < table->sleeping_time)
 			usleep(50);
 		pthread_mutex_lock(&philo->state_lock);
 		philo->state = THINKING;
 		pthread_mutex_unlock(&philo->state_lock);
+		pthread_mutex_lock(&table->print_lock);
 		printf("%d %d is thinking.\n", get_timestamp(table), philo->id + 1);
+		pthread_mutex_unlock(&table->print_lock);
 	}
 }

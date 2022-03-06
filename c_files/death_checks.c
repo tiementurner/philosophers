@@ -12,6 +12,40 @@
 
 #include "header.h"
 
+int		check_if_done(t_table *table, t_philosopher *philo)
+{
+	pthread_mutex_lock(&table->check_lock);
+	if (philo->state == DEAD || table->funeral)
+		return (1);
+	if (philo->meals == table->number_of_meals)
+	{
+		table->finished_eating++;
+		pthread_mutex_unlock(&table->check_lock);
+		return (1);
+	}
+	pthread_mutex_unlock(&table->check_lock);
+	return(0);
+}
+
+int			twenty_five_line_rule(t_table *table, t_philosopher *philo)
+{
+	pthread_mutex_lock(&philo->state_lock);
+	pthread_mutex_lock(&table->check_lock);
+	if (philo->state == DEAD || table->finished_eating == table->n_philosophers)
+	{
+		pthread_mutex_lock(&table->print_lock);
+		printf("ending millisecond: %d\n", get_timestamp(table));
+		pthread_mutex_unlock(&table->print_lock);
+		table->funeral = 1;
+		pthread_mutex_unlock(&philo->state_lock);
+		pthread_mutex_unlock(&table->check_lock);
+		return (0);
+	}
+	pthread_mutex_unlock(&philo->state_lock);
+	pthread_mutex_unlock(&table->check_lock);
+	return (1);
+}
+
 void		*check_pulse_rates(void *arg)
 {
 	int i;
@@ -24,19 +58,8 @@ void		*check_pulse_rates(void *arg)
 		i = 0;
 		while (i < table->n_philosophers)
 		{
-			pthread_mutex_lock(&table->philo_list[i].state_lock);
-			pthread_mutex_lock(&table->check_lock);
-			if (table->philo_list[i].state == DEAD || table->finished_eating == table->n_philosophers)
-			{
-			//	get_timestamp(table);
-				printf("ending millisecond: %d\n", get_timestamp(table));
-				table->funeral = 1;
-				pthread_mutex_unlock(&table->philo_list[i].state_lock);
-				pthread_mutex_unlock(&table->check_lock);
-				break ;
-			}
-			pthread_mutex_unlock(&table->philo_list[i].state_lock);
-			pthread_mutex_unlock(&table->check_lock);
+			if (!twenty_five_line_rule(table, &table->philo_list[i]))
+				return (0);
 			i++;
 		}
 		usleep(50);
@@ -48,7 +71,9 @@ void		check_stomach(t_table *table, t_philosopher *philo)
 {
 	if (get_timestamp(table) - philo->time_since_meal > table->time_until_starve)
 	{
+		pthread_mutex_lock(&table->print_lock);
 		printf("%d %d died.\n", get_timestamp(table), philo->id + 1);
+		pthread_mutex_unlock(&table->print_lock);
 		pthread_mutex_lock(&philo->state_lock);
 		philo->state = DEAD;
 		pthread_mutex_unlock(&philo->state_lock);

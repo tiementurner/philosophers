@@ -22,8 +22,6 @@ static	int		synchronize_threads(t_table *table)
 		id++;
 	table->philo_list[id].threaded = 1;
 	pthread_mutex_unlock(&table->sync_lock);
-	// while (table->philo_list[table->n_philosophers - 1].threaded == 0)
-	// 	usleep(50);//
 	return (id);
 }
 
@@ -35,20 +33,6 @@ int	get_timestamp(t_table *table)
 	timestamp = (table->time.tv_sec - table->start_sec) * 1000 +
 				(table->time.tv_usec / 1000 - table->start_usec / 1000);
 	return(timestamp);
-}
-
-int		check_if_done(t_table *table, t_philosopher *philo)
-{
-	pthread_mutex_lock(&table->check_lock);
-	if (philo->state == DEAD || table->funeral)
-		return (1) ;
-	if (philo->meals == table->number_of_meals)
-	{
-		table->finished_eating++;
-		return (1);
-	}
-	pthread_mutex_unlock(&table->check_lock);
-	return(0);
 }
 
 static	void	*philo_thread(void *arg)
@@ -103,7 +87,6 @@ void	start_threading(t_table *table)
 		pthread_create(&thread_list[i], NULL, philo_thread, table);
 		i++;
 	}
-//	while (table->philo_list[table->n_philosophers - 1].threaded == 0)
 	pthread_create(&pulse_checker, NULL, check_pulse_rates, table);
 	join_threads(thread_list, table->n_philosophers, pulse_checker);
 }

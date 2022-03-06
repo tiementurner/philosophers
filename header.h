@@ -61,12 +61,14 @@ typedef struct 		s_table
 	int				timestamp;
 	pthread_mutex_t	sync_lock;
 	pthread_mutex_t	check_lock;
+	pthread_mutex_t	print_lock;
 }					t_table;
 
 
+int		check_if_done(t_table *table, t_philosopher *philo);
 void	put_error(char *error);
-void	argument_check(int ac, char **av);
-void	initialize(t_table *table, char **av, int ac);
+int		validate_input(t_table *table, int ac, char **av);
+void	initialize(t_table *table);
 void	start_threading(t_table *table);
 void	try_to_eat(t_table *table, t_philosopher *philo);
 void	sleep_and_think(t_table *table, t_philosopher *philo);
