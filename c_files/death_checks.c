@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 17:50:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/08 17:34:48 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/08 17:36:41 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,43 +29,6 @@ int		check_if_done(t_table *table, t_philosopher *philo)
 	pthread_mutex_unlock(&table->check_lock);
 	return(0);
 }
-
-int			twenty_five_line_rule(t_table *table, t_philosopher *philo)
-{
-	pthread_mutex_lock(&philo->state_lock);
-	if (philo->state == DEAD || table->finished_eating == table->n_philosophers)
-	{
-		printf("ending millisecond: %d\n", get_timestamp(table));
-		table->funeral = 1;
-		pthread_mutex_unlock(&philo->state_lock);
-		return (0);
-	}
-	pthread_mutex_unlock(&philo->state_lock);
-	return (1);
-}
-
-// void		*check_pulse_rates(void *arg)
-// {
-// 	int i;
-// 	t_table	*table;
-
-// 	table = (t_table *) arg;
-// 	i = 0;
-// 	while (!table->funeral)
-// 	{
-// 		i = 0;
-// 		pthread_mutex_lock(&table->check_lock);
-// 		while (i < table->n_philosophers)
-// 		{
-// 			if (!twenty_five_line_rule(table, &table->philo_list[i]))
-// 				return (0);
-// 			i++;
-// 		}
-// 		pthread_mutex_unlock(&table->check_lock);
-// 		usleep(50);
-// 	}
-// 	return (0);
-// }
 
 void		check_stomach(t_table *table, t_philosopher *philo)
 {
