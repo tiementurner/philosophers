@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/04 15:51:57 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/08 16:07:44 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,8 @@
 #include <pthread.h>
 #include "libft/libft.h"
 
-#define NOTHING 0
-#define THINKING 1
-#define SLEEPING 3
-#define DEAD 4
-
-#define TAKEN 0
-#define ON_TABLE 1
+#define ALIVE 0
+#define DEAD 1
 
 typedef	struct 		s_philosopher
 {
@@ -70,10 +65,12 @@ void	put_error(char *error);
 int		validate_input(t_table *table, int ac, char **av);
 void	initialize(t_table *table);
 void	start_threading(t_table *table);
-void	try_to_eat(t_table *table, t_philosopher *philo);
+void	eat(t_table *table, t_philosopher *philo);
 void	sleep_and_think(t_table *table, t_philosopher *philo);
 void	*check_pulse_rates(void *arg);
 void	check_stomach(t_table *table, t_philosopher *philo);
 int		get_timestamp(t_table *table);
+void	philo_print(char *message, t_table *table, t_philosopher *philo);
+int		get_philo_id(t_table *table);
 
 # endif

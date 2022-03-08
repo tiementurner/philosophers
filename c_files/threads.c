@@ -6,34 +6,11 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/04 00:42:56 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/08 17:34:42 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-static	int		get_philo_id(t_table *table)
-{
-	int	id;
-
-	id = 0;
-	pthread_mutex_lock(&table->sync_lock);
-	while (table->philo_list[id].threaded)
-		id++;
-	table->philo_list[id].threaded = 1;
-	pthread_mutex_unlock(&table->sync_lock);
-	return (id);
-}
-
-int	get_timestamp(t_table *table)
-{
-	int timestamp;
-
-	gettimeofday(&table->time, NULL);
-	timestamp = (table->time.tv_sec - table->start_sec) * 1000 +
-				(table->time.tv_usec / 1000 - table->start_usec / 1000);
-	return(timestamp);
-}
 
 static	void	*philo_thread(void *arg)
 {
@@ -47,7 +24,7 @@ static	void	*philo_thread(void *arg)
 	{
 		if (check_if_done(table, philo))
 			break ;
-		try_to_eat(table, philo);
+		eat(table, philo);
 		if (check_if_done(table, philo))
 			break ;
 		sleep_and_think(table, philo);
@@ -58,7 +35,7 @@ static	void	*philo_thread(void *arg)
 	return (0);
 }
 
-static	void	join_threads(pthread_t *thread_list, int n, pthread_t pulse_check)
+static	void	join_threads(pthread_t *thread_list, int n)
 {
 	int i;
 
@@ -68,14 +45,14 @@ static	void	join_threads(pthread_t *thread_list, int n, pthread_t pulse_check)
 		pthread_join(thread_list[i], NULL);
 		i++;
 	}
-	pthread_join(pulse_check, NULL);
+//	pthread_join(pulse_check, NULL);
 }
 
 void	start_threading(t_table *table)
 {	
 	pthread_t		thread_list[table->n_philosophers];
 	int				i;
-	pthread_t		pulse_checker;
+//	pthread_t		pulse_checker;
 
 	i = 0;
 	gettimeofday(&table->time, NULL);
@@ -86,6 +63,6 @@ void	start_threading(t_table *table)
 		pthread_create(&thread_list[i], NULL, philo_thread, table);
 		i++;
 	}
-	pthread_create(&pulse_checker, NULL, check_pulse_rates, table);
-	join_threads(thread_list, table->n_philosophers, pulse_checker);
+//	pthread_create(&pulse_checker, NULL, check_pulse_rates, table);
+	join_threads(thread_list, table->n_philosophers);
 }
