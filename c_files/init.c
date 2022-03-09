@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/08 16:07:33 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/09 14:35:11 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	create_philo_list(t_table *table)
 
 void	initialize(t_table *table)
 {
-	int i;
+	int	i;
 
 	table->funeral = 0;
 	table->timestamp = 0;
@@ -46,6 +46,7 @@ void	initialize(t_table *table)
 	i = 0;
 	table->lock = malloc(sizeof(pthread_mutex_t) * table->n_philosophers);
 	table->fork_list = malloc(sizeof(int) * table->n_philosophers);
+	table->thread_list = malloc(sizeof(pthread_t) * table->n_philosophers);
 	while (i < table->n_philosophers)
 	{
 		table->fork_list[i] = 1;

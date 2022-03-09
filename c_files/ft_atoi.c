@@ -6,13 +6,24 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2019/11/05 10:15:29 by tblanker      #+#    #+#                 */
-/*   Updated: 2020/10/11 16:14:56 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/09 15:00:14 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+int	ft_strlen(const char *s)
+{
+	int	i;
 
-static int		ft_checklongs(int sign)
+	i = 0;
+	while (*s)
+	{
+		i++;
+		s++;
+	}
+	return (i);
+}
+
+static int	ft_checklongs(int sign)
 {
 	if (sign == 1)
 		return (-1);
@@ -20,7 +31,7 @@ static int		ft_checklongs(int sign)
 		return (0);
 }
 
-static	int		ft_skip_spaces(const char *str)
+static int	ft_skip_spaces(const char *str)
 {
 	int	i;
 
@@ -30,7 +41,7 @@ static	int		ft_skip_spaces(const char *str)
 	return (i);
 }
 
-int				ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	long	result;
 	int		i;

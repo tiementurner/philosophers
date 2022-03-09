@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/08 17:36:13 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/09 14:14:17 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 static	void	*philo_thread(void *arg)
 {
-	t_table 		*table;
-	t_philosopher 	*philo;
+	t_table			*table;
+	t_philosopher	*philo;
 
 	table = (t_table *) arg;
-	
 	philo = &table->philo_list[get_philo_id(table)];
-	while(1)
+	while (1)
 	{
 		if (check_if_done(table, philo))
 			break ;
@@ -37,7 +36,7 @@ static	void	*philo_thread(void *arg)
 
 static	void	join_threads(pthread_t *thread_list, int n)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < n)
@@ -48,8 +47,7 @@ static	void	join_threads(pthread_t *thread_list, int n)
 }
 
 void	start_threading(t_table *table)
-{	
-	pthread_t		thread_list[table->n_philosophers];
+{
 	int				i;
 
 	i = 0;
@@ -58,8 +56,8 @@ void	start_threading(t_table *table)
 	table->start_usec = table->time.tv_usec;
 	while (i < table->n_philosophers)
 	{
-		pthread_create(&thread_list[i], NULL, philo_thread, table);
+		pthread_create(&table->thread_list[i], NULL, philo_thread, table);
 		i++;
 	}
-	join_threads(thread_list, table->n_philosophers);
+	join_threads(table->thread_list, table->n_philosophers);
 }

@@ -7,7 +7,7 @@
 			ms += (table->time.tv_usec - table->previous_usec) / 1000;
 		table->previous_sec = table->time.tv_sec;
 		table->previous_usec = table->time.tv_usec;
-	//	printf("%d\n", ms);
+	//	printf("%-10d\n", ms);
 	}
 
 
@@ -28,10 +28,10 @@
 			table->philo_list[id].milliseconds_counted += (table->philo_list[id].time.tv_usec - table->philo_list[id].previous_usec) / 1000;
 		table->philo_list[id].previous_sec = table->philo_list[id].time.tv_sec;
 		table->philo_list[id].previous_usec = table->philo_list[id].time.tv_usec;
-		//printf("%d\n", table->philo_list[id].milliseconds_counted);
+		//printf("%-10d\n", table->philo_list[id].milliseconds_counted);
 		if (table->philo_list[id].milliseconds_counted > 1000)
 			printf("philo %d is changing state\n", id);
-		//printf("%d\n", table->philo_list[id].milliseconds_counted);
+		//printf("%-10d\n", table->philo_list[id].milliseconds_counted);
 	}
 
 
@@ -63,7 +63,7 @@ void	*timer_thread(void *arg)
 		}
 		table->previous_sec = table->time.tv_sec;
 		table->previous_usec = table->time.tv_usec;
-		//printf("%d\n", ms);
+		//printf("%-10d\n", ms);
 	}
 
 
@@ -80,7 +80,7 @@ void			put_fork_back(t_table *table, t_philosopher *philo)
 		pthread_mutex_lock(&table->lock[philo->left]);
 		table->fork_list[philo->left] = ON_TABLE;
 		pthread_mutex_unlock(&table->lock[philo->left]);
-//		printf("%d %d has put fork back fork num :%d\n", table->timestamp, philo->id + 1, philo->left);
+//		printf("%-10d %d has put fork back fork num :%d\n", table->timestamp, philo->id + 1, philo->left);
 		philo->forks_in_hand = 0;
 		philo->left_taken = 0;
 	}
@@ -89,7 +89,7 @@ void			put_fork_back(t_table *table, t_philosopher *philo)
 		pthread_mutex_lock(&table->lock[philo->right]);
 		table->fork_list[philo->right] = ON_TABLE;
 		pthread_mutex_unlock(&table->lock[philo->right]);
-//		printf("%d %d has put fork back\n", table->timestamp, philo->id + 1);
+//		printf("%-10d %d has put fork back\n", table->timestamp, philo->id + 1);
 		philo->forks_in_hand = 0;
 		philo->right_taken = 0;
 	}
