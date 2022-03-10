@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 18:41:54 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 20:51:01 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 # include <sys/time.h>
 # include <unistd.h>
 # include <pthread.h>
-
-# define ALIVE 0
-# define DEAD 1
 
 typedef struct s_philosopher
 {

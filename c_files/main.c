@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:18 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 20:38:36 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 20:40:52 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,5 @@ int	main(int ac, char **av)
 	}
 	start_threading(&table);
 	free_machine(&table);
-	while (1);
 	return (1);
 }

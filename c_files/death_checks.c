@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 17:50:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 18:50:42 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 21:04:29 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	check_if_done(t_table *table, t_philosopher *philo)
 {
 	pthread_mutex_lock(&table->check_lock);
-	if (philo->state == DEAD || table->funeral)
+	if (table->funeral)
 	{
 		pthread_mutex_unlock(&table->check_lock);
 		return (1);
