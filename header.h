@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 14:10:49 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 18:41:54 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_philosopher
 	int				right;
 	int				start;
 	int				meals;
-	pthread_mutex_t	state_lock;
 }					t_philosopher;
 
 typedef struct s_table
@@ -58,9 +57,9 @@ typedef struct s_table
 }					t_table;
 
 int		check_if_done(t_table *table, t_philosopher *philo);
-void	put_error(char *error);
+void	put_error(char *error, int usage);
 int		validate_input(t_table *table, int ac, char **av);
-void	initialize(t_table *table);
+int		initialize(t_table *table);
 void	start_threading(t_table *table);
 void	eat(t_table *table, t_philosopher *philo);
 void	sleep_and_think(t_table *table, t_philosopher *philo);

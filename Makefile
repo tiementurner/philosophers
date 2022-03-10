@@ -6,11 +6,11 @@
 #    By: tblanker <tblanker@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/01/26 13:55:50 by tblanker      #+#    #+#                  #
-#    Updated: 2022/03/10 18:24:43 by tblanker      ########   odam.nl          #
+#    Updated: 2022/03/10 20:36:13 by tblanker      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-CC_FLAGS = -Wall -Werror -Wextra -pthread
+CC_FLAGS = -Wall -Werror -Wextra -pthread -g
 
 NAME = philo
 
@@ -52,7 +52,6 @@ fclean	:	clean
 
 re		: fclean all
 
-push	:	
+commit	:	
 			git add .
-			git commit -m "quick push from makefile"
-			git push
+			git commit -m "saving current state for backtracking"

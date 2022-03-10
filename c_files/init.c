@@ -6,24 +6,11 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 18:19:33 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 19:45:35 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header.h"
-
-static	int	destroy_state_mutexes(t_philosopher *list, int n)
-{
-	int	i;
-
-	i = 0;
-	while (i < n)
-	{
-		pthread_mutex_destroy(&list[i].state_lock);
-		i++;
-	}
-	return (0);
-}
 
 static	int	create_philo_list(t_table *table)
 {
@@ -31,7 +18,7 @@ static	int	create_philo_list(t_table *table)
 
 	i = 0;
 	table->philo_list = malloc(sizeof(t_philosopher) * table->n_philosophers);
-	if (!table->philo->list)
+	if (!table->philo_list)
 		return (0);
 	while (i < table->n_philosophers)
 	{
@@ -46,8 +33,7 @@ static	int	create_philo_list(t_table *table)
 		table->philo_list[i].forks_in_hand = 0;
 		table->philo_list[i].start = 0;
 		table->philo_list[i].meals = 0;
-		if (pthread_mutex_init(&table->philo_list[i].state_lock, NULL))
-			return (destroy_state_mutexes(table->philo_list, i));
+		table->philo_list[i].time_since_meal = 0;
 		i++;
 	}
 	return (1);
@@ -55,19 +41,34 @@ static	int	create_philo_list(t_table *table)
 
 int	init_mutexes(t_table *table)
 {
-	if (pthread_mutex_init(&table->sync_lock))
+	int	i;
+
+	i = 0;
+	if (pthread_mutex_init(&table->check_lock, NULL))
 		return (0);
-	if (pthread_mutex_init(&table->check_lock))
+	if (pthread_mutex_init(&table->print_lock, NULL))
 	{
-		pthread_mutex_destroy(&table->sync_lock);
+		pthread_mutex_destroy(&table->check_lock);
 		return (0);
 	}
-	if (pthread_mutex_init(&table->print_lock))
-		return (0);
+	while (i < table->n_philosophers)
+	{
+		if (pthread_mutex_init(&table->lock[i], NULL))
+		{
+			i--;
+			while (i > 0)
+			{
+				pthread_mutex_destroy(&table->lock[i]);
+				i--;
+			}
+			return (0);
+		}
+		i++;
+	}
 	return (1);
 }
 
-void	initialize(t_table *table)
+int	initialize(t_table *table)
 {
 	int	i;
 
@@ -83,11 +84,6 @@ void	initialize(t_table *table)
 	{
 		free(table->lock);
 		return (0);
-	}
-	while (i < table->n_philosophers)
-	{
-		pthread_mutex_init(&table->lock[i], NULL);
-		i++;
 	}
 	if (!init_mutexes(table))
 		return (0);

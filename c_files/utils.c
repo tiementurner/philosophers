@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/08 15:14:39 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 15:03:25 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 19:23:47 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@ void	free_machine(t_table *table)
 	i = 0;
 	while (i < table->n_philosophers)
 	{
-		if (pthread_mutex_destroy(&table->lock[i]) != 0)
-			put_error("Mutex destroy error.");
-		if (pthread_mutex_destroy(&table->philo_list[i].state_lock) != 0)
-			put_error("Mutex destroy error.");
+		pthread_mutex_destroy(&table->lock[i]);
 		i++;
 	}
+	pthread_mutex_destroy(&table->check_lock);
+	pthread_mutex_destroy(&table->print_lock);
 	free(table->philo_list);
 	free(table->thread_list);
 	free(table->lock);
@@ -35,11 +34,11 @@ int	get_philo_id(t_table *table)
 	int	id;
 
 	id = 0;
-	pthread_mutex_lock(&table->sync_lock);
+	pthread_mutex_lock(&table->check_lock);
 	while (table->philo_list[id].threaded)
 		id++;
 	table->philo_list[id].threaded = 1;
-	pthread_mutex_unlock(&table->sync_lock);
+	pthread_mutex_unlock(&table->check_lock);
 	return (id);
 }
 

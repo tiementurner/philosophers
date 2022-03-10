@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 13:57:12 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 19:49:54 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static	void	*philo_thread(void *arg)
 		if (check_if_done(table, philo))
 			break ;
 		eat(table, philo);
+		check_stomach(table, philo);
 		if (check_if_done(table, philo))
 			break ;
 		sleep_and_think(table, philo);
@@ -41,7 +42,11 @@ static	void	join_threads(pthread_t *thread_list, int n)
 	i = 0;
 	while (i < n)
 	{
-		pthread_join(thread_list[i], NULL);
+		if (pthread_join(thread_list[i], NULL))
+		{
+			put_error("joining threads failed.", 0);
+			break ;
+		}
 		i++;
 	}
 }
@@ -56,11 +61,14 @@ void	start_threading(t_table *table)
 	table->start_usec = table->time.tv_usec;
 	while (i < table->n_philosophers)
 	{
-		pthread_create(&table->thread_list[i], NULL, philo_thread, table);
+		if (pthread_create(&table->thread_list[i], NULL, philo_thread, table))
+		{
+			join_threads(table->thread_list, i);
+			put_error("Could not create threads.", 0);
+			break ;
+		}
 		i++;
 	}
-	join_threads(table->thread_list, table->n_philosophers);
-	pthread_mutex_destroy(&table->sync_lock);
-	pthread_mutex_destroy(&table->check_lock);
-	pthread_mutex_destroy(&table->print_lock);
+	if (i == table->n_philosophers)
+		join_threads(table->thread_list, table->n_philosophers);
 }

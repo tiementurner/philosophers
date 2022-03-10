@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/18 13:17:39 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/09 15:03:06 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 19:50:37 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,22 @@
 static void	grab_forks(t_table *table, t_philosopher *philo)
 {
 	int	timestamp;
-	int	dinner_time;
 
 	pthread_mutex_lock(&table->lock[philo->left]);
 	philo_print("has taken a fork.\n", table, philo);
+	if (philo->right == philo->left)
+	{
+		timestamp = get_timestamp(table);
+		pthread_mutex_unlock(&table->lock[philo->left]);
+		while (get_timestamp(table) - timestamp < table->time_until_starve + 1)
+			usleep(50);
+		return ;
+	}
 	pthread_mutex_lock(&table->lock[philo->right]);
 	philo_print("has taken a fork.\n", table, philo);
-	timestamp = get_timestamp(table);
 	philo_print("is eating\n", table, philo);
-	philo->time_since_meal = timestamp;
-	dinner_time = timestamp;
-	while (get_timestamp(table) - dinner_time < table->eating_time)
+	philo->time_since_meal = get_timestamp(table);
+	while (get_timestamp(table) - philo->time_since_meal < table->eating_time)
 		usleep(50);
 	pthread_mutex_unlock(&table->lock[philo->left]);
 	pthread_mutex_unlock(&table->lock[philo->right]);

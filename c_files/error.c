@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 14:16:11 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 13:44:33 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 18:49:30 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@ static void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-void	put_error(char *error)
+void	put_error(char *error, int usage)
 {
 	ft_putstr_fd("Error:\n", 1);
 	ft_putstr_fd(error, 1);
 	ft_putstr_fd("\n", 1);
-	printf("usage: ./philo [number] [number] [number] [number] \
+	if (usage == 1)
+		printf("usage: ./philo [number] [number] [number] [number] \
 (optional)[number]\n");
 }
 
@@ -39,12 +40,12 @@ int	validate_input(t_table *table, int ac, char **av)
 {
 	if (ac < 5)
 	{
-		put_error("Not enough arguments(4 needed).");
+		put_error("Not enough arguments(4 needed).", 1);
 		return (0);
 	}
 	if (ac > 6)
 	{
-		put_error("Too many arguments(max 5).");
+		put_error("Too many arguments(max 5).", 1);
 		return (0);
 	}
 	if (ac == 6)
@@ -58,7 +59,7 @@ int	validate_input(t_table *table, int ac, char **av)
 		|| table->sleeping_time < 0 || table->time_until_starve < 0
 		|| (table->number_of_meals < 0 && ac == 6))
 	{
-		put_error("Only positive numbers allowed as arguments.");
+		put_error("Only positive numbers allowed as arguments.", 0);
 		return (0);
 	}
 	return (1);

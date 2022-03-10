@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 17:50:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 13:44:47 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 18:50:42 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	check_stomach(t_table *table, t_philosopher *philo)
 	{
 		if (check_if_done(table, philo))
 			return ;
-		pthread_mutex_lock(&philo->state_lock);
+		pthread_mutex_lock(&table->check_lock);
 		table->funeral = 1;
-		pthread_mutex_unlock(&philo->state_lock);
+		pthread_mutex_unlock(&table->check_lock);
 		pthread_mutex_lock(&table->print_lock);
 		usleep(1000);
 		printf("%-10d %d died.\n", timestamp, philo->id + 1);
