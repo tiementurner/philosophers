@@ -6,11 +6,11 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 17:50:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/09 17:07:22 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 13:44:47 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 int	check_if_done(t_table *table, t_philosopher *philo)
 {

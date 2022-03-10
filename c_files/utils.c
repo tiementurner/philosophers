@@ -6,11 +6,29 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/03/08 15:14:39 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/09 17:07:22 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 15:03:25 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
+
+void	free_machine(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->n_philosophers)
+	{
+		if (pthread_mutex_destroy(&table->lock[i]) != 0)
+			put_error("Mutex destroy error.");
+		if (pthread_mutex_destroy(&table->philo_list[i].state_lock) != 0)
+			put_error("Mutex destroy error.");
+		i++;
+	}
+	free(table->philo_list);
+	free(table->thread_list);
+	free(table->lock);
+}
 
 int	get_philo_id(t_table *table)
 {

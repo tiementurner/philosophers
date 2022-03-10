@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/09 14:37:16 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 14:10:49 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_table
 {
 	int				finished_eating;
 	int				funeral;
-	int				*fork_list;
 	int				n_philosophers;
 	int				time_until_starve;
 	int				eating_time;
@@ -72,5 +71,6 @@ void	philo_print(char *message, t_table *table, t_philosopher *philo);
 int		get_philo_id(t_table *table);
 int		ft_atoi(const char *str);
 int		ft_strlen(const char *s);
+void	free_machine(t_table *table);
 
 #	endif

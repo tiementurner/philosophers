@@ -6,11 +6,11 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/09 14:14:17 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 13:57:12 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 static	void	*philo_thread(void *arg)
 {
@@ -60,4 +60,7 @@ void	start_threading(t_table *table)
 		i++;
 	}
 	join_threads(table->thread_list, table->n_philosophers);
+	pthread_mutex_destroy(&table->sync_lock);
+	pthread_mutex_destroy(&table->check_lock);
+	pthread_mutex_destroy(&table->print_lock);
 }

@@ -6,7 +6,7 @@
 #    By: tblanker <tblanker@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/01/26 13:55:50 by tblanker      #+#    #+#                  #
-#    Updated: 2022/03/09 16:58:45 by tblanker      ########   odam.nl          #
+#    Updated: 2022/03/10 18:24:43 by tblanker      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,3 +51,8 @@ fclean	:	clean
 	rm -rf $(NAME)
 
 re		: fclean all
+
+push	:	
+			git add .
+			git commit -m "quick push from makefile"
+			git push

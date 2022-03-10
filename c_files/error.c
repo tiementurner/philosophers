@@ -6,11 +6,11 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/01/26 14:16:11 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/09 15:12:53 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/10 13:44:33 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "header.h"
+#include "../header.h"
 
 static void	ft_putstr_fd(char *s, int fd)
 {
