@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 19:21:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 19:49:54 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/21 14:03:15 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static	void	*philo_thread(void *arg)
 		sleep_and_think(table, philo);
 		if (check_if_done(table, philo))
 			break ;
-		check_stomach(table, philo);
 	}
 	return (0);
 }
@@ -69,6 +68,7 @@ void	start_threading(t_table *table)
 		}
 		i++;
 	}
+	check_if_die(table);
 	if (i == table->n_philosophers)
 		join_threads(table->thread_list, table->n_philosophers);
 }

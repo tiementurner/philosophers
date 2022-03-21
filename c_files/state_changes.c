@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/18 13:17:39 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 21:02:23 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/21 14:19:06 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	grab_forks(t_table *table, t_philosopher *philo)
 void	eat(t_table *table, t_philosopher *philo)
 {
 	if (philo->start == 0)
-		usleep(1000 * (philo->id % 2));
+		usleep((1000 * table->n_philosophers) * (philo->id % 2));
 	philo->start = 1;
 	grab_forks(table, philo);
 	philo->meals++;

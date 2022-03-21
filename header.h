@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:30 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 20:51:01 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/21 12:59:52 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_table
 }					t_table;
 
 int		check_if_done(t_table *table, t_philosopher *philo);
+void	check_if_die(t_table *table);
 void	put_error(char *error, int usage);
 int		validate_input(t_table *table, int ac, char **av);
 int		initialize(t_table *table);

@@ -6,11 +6,11 @@
 #    By: tblanker <tblanker@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/01/26 13:55:50 by tblanker      #+#    #+#                  #
-#    Updated: 2022/03/10 21:02:47 by tblanker      ########   odam.nl          #
+#    Updated: 2022/03/21 12:21:58 by tblanker      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-CC_FLAGS = -Wall -Werror -Wextra -pthread -fsanitize=thread -g
+CC_FLAGS = -Wall -Werror -Wextra -pthread
 
 NAME = philo
 
