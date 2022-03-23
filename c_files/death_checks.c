@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 17:50:28 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/21 14:01:03 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/23 20:48:52 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,10 @@ void	check_stomach(t_table *table, t_philosopher *philo)
 	int	timestamp;
 
 	timestamp = get_timestamp(table);
+	pthread_mutex_lock(&table->check_lock);
 	if (timestamp - philo->time_since_meal > table->time_until_starve)
 	{
+		pthread_mutex_unlock(&table->check_lock);
 		if (check_if_done(table, philo))
 			return ;
 		pthread_mutex_lock(&table->check_lock);
@@ -71,4 +73,5 @@ void	check_stomach(t_table *table, t_philosopher *philo)
 		printf("%-10d %d died.\n", timestamp, philo->id + 1);
 		pthread_mutex_unlock(&table->print_lock);
 	}
+	pthread_mutex_unlock(&table->check_lock);
 }
