@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 17:22:18 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/21 13:41:59 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/03/24 14:51:58 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int ac, char **av)
 	table.n_philosophers = ft_atoi(av[1]);
 	if (!initialize(&table))
 	{
-		put_error("Oops! something went wrong when initializing.", 0);
+		put_error("Oops! something went wrong during initialisation.", 0);
 		return (0);
 	}
 	start_threading(&table);
