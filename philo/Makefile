@@ -6,7 +6,7 @@
 #    By: tblanker <tblanker@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/01/26 13:55:50 by tblanker      #+#    #+#                  #
-#    Updated: 2022/03/23 20:49:56 by tblanker      ########   odam.nl          #
+#    Updated: 2022/04/10 14:59:42 by tblanker      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,14 +14,14 @@ CC_FLAGS = -Wall -Werror -Wextra -pthread
 
 NAME = philo
 
-CC = clang
+CC = cc
 
-FILES = c_files/main.c c_files/error.c c_files/init.c c_files/threads.c \
+FILES = c_files/main.c c_files/validate.c c_files/init.c c_files/threads.c \
 		c_files/state_changes.c c_files/death_checks.c c_files/utils.c \
 		c_files/ft_atoi.c
 
 OFILES = $(FILES:.c=.o)
-
+ 
 GREEN = \033[0;38;5;114m
 RED = \033[38;5;124m
 BLUE = \033[38;5;153m

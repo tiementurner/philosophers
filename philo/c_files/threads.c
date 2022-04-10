@@ -18,6 +18,8 @@ static	void	*philo_thread(void *arg)
 	t_philosopher	*philo;
 
 	table = (t_table *) arg;
+	pthread_mutex_lock(&table->sync_lock);
+	pthread_mutex_unlock(&table->sync_lock);
 	philo = &table->philo_list[get_philo_id(table)];
 	while (1)
 	{
@@ -58,17 +60,18 @@ void	start_threading(t_table *table)
 	gettimeofday(&table->time, NULL);
 	table->start_sec = table->time.tv_sec;
 	table->start_usec = table->time.tv_usec;
+	pthread_mutex_lock(&table->sync_lock);
 	while (i < table->n_philosophers)
 	{
 		if (pthread_create(&table->thread_list[i], NULL, philo_thread, table))
 		{
-			join_threads(table->thread_list, i);
+			table->funeral = 1;
 			put_error("Could not create threads.", 0);
 			break ;
 		}
 		i++;
 	}
+	pthread_mutex_unlock(&table->sync_lock);
 	check_if_die(table);
-	if (i == table->n_philosophers)
-		join_threads(table->thread_list, table->n_philosophers);
+	join_threads(table->thread_list, i);
 }

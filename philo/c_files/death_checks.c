@@ -16,6 +16,8 @@ void	check_if_die(t_table *table)
 {
 	int	i;
 
+	if (table->n_philosophers == 0)
+		return ;
 	while (1)
 	{
 		i = 0;
@@ -68,6 +70,7 @@ void	check_stomach(t_table *table, t_philosopher *philo)
 			return ;
 		pthread_mutex_lock(&table->check_lock);
 		table->funeral = 1;
+		usleep(500);
 		pthread_mutex_unlock(&table->check_lock);
 		pthread_mutex_lock(&table->print_lock);
 		printf("%-10d %d died.\n", timestamp, philo->id + 1);

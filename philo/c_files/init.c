@@ -6,7 +6,7 @@
 /*   By: tblanker <tblanker@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/05 18:16:04 by tblanker      #+#    #+#                 */
-/*   Updated: 2022/03/10 20:51:05 by tblanker      ########   odam.nl         */
+/*   Updated: 2022/04/10 14:37:49 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ static	int	create_philo_list(t_table *table)
 			table->philo_list[i].right = table->n_philosophers - 1;
 		table->philo_list[i].id = i;
 		table->philo_list[i].threaded = 0;
-		table->philo_list[i].time_since_meal = 0;
-		table->philo_list[i].forks_in_hand = 0;
 		table->philo_list[i].start = 0;
 		table->philo_list[i].meals = 0;
 		table->philo_list[i].time_since_meal = 0;
@@ -84,6 +82,8 @@ int	initialize(t_table *table)
 		free(table->lock);
 		return (0);
 	}
+	if (pthread_mutex_init(&table->sync_lock, NULL))
+		return (0);
 	if (!init_mutexes(table))
 		return (0);
 	if (!create_philo_list(table))

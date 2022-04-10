@@ -9,7 +9,6 @@
 /*   Updated: 2022/03/09 15:00:14 by tblanker      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 int	ft_strlen(const char *s)
 {
 	int	i;
@@ -21,14 +20,6 @@ int	ft_strlen(const char *s)
 		s++;
 	}
 	return (i);
-}
-
-static int	ft_checklongs(int sign)
-{
-	if (sign == 1)
-		return (-1);
-	else
-		return (0);
 }
 
 static int	ft_skip_spaces(const char *str)
@@ -43,10 +34,9 @@ static int	ft_skip_spaces(const char *str)
 
 int	ft_atoi(const char *str)
 {
-	long	result;
+	int		result;
 	int		i;
 	long	sign;
-	long	temp;
 
 	sign = 1;
 	if (!*str || ft_strlen(str) == 0)
@@ -58,14 +48,12 @@ int	ft_atoi(const char *str)
 		sign = 1 - 2 * (str[i] == '-');
 		i++;
 	}
-	temp = 0;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		temp = result;
+		if ((i == 9 && str[i] > '7' ) || i > 9)
+			return (0);
 		result = result * 10 + (str[i] - '0');
 		i++;
 	}
-	if (temp > result)
-		return (ft_checklongs(sign));
 	return (result * sign);
 }
